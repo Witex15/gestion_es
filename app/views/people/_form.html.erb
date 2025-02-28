@@ -1,0 +1,125 @@
+<%= form_with(model: person, class: "contents") do |form| %>
+  <% if person.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(person.errors.count, "error") %> prohibited this person from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% person.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :username %>
+    <%= form.text_field :username, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:username].none?, "border-red-400 focus:outline-red-600": person.errors[:username].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :lastname %>
+    <%= form.text_field :lastname, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:lastname].none?, "border-red-400 focus:outline-red-600": person.errors[:lastname].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :firstname %>
+    <%= form.text_field :firstname, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:firstname].none?, "border-red-400 focus:outline-red-600": person.errors[:firstname].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email %>
+    <%= form.email_field :email, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:email].none?, "border-red-400 focus:outline-red-600": person.errors[:email].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :password %>
+    <%= form.password_field :password, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:password].none?, "border-red-400 focus:outline-red-600": person.errors[:password].any?}] %>
+    <% if person.new_record? %>
+      <p class="mt-1 text-sm text-gray-500">Password is required for new users.</p>
+    <% else %>
+      <p class="mt-1 text-sm text-gray-500">Leave blank if you don't want to change the password.</p>
+    <% end %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :password_confirmation %>
+    <%= form.password_field :password_confirmation, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:password_confirmation].none?, "border-red-400 focus:outline-red-600": person.errors[:password_confirmation].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :phone_number %>
+    <%= form.text_field :phone_number, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:phone_number].none?, "border-red-400 focus:outline-red-600": person.errors[:phone_number].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :iban %>
+    <%= form.text_field :iban, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:iban].none?, "border-red-400 focus:outline-red-600": person.errors[:iban].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :role %>
+    <%= form.select :role, Person.roles.keys.map { |role| [role.titleize, role] }, {}, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": person.errors[:role].none?, "border-red-400 focus:outline-red-600": person.errors[:role].any?}] %>
+  </div>
+
+  <div class="my-5" data-controller="status-select">
+    <%= form.label :status_id, "Status" %>
+    <div class="space-y-2">
+      <%= form.select :status_id, 
+          @statuses.map { |s| [s.title, s.id] },
+          { include_blank: "Select existing status" },
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": person.errors[:status_id].none?, 
+                  "border-red-400 focus:outline-red-600": person.errors[:status_id].any?}],
+          data: { action: "change->status-select#toggleNewStatus" } %>
+
+      <div class="mt-2">
+        <%= form.label :new_status_name, "Or create new status:", class: "text-sm text-gray-600" %>
+        <%= form.text_field :new_status_name,
+            class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-1 w-full", 
+                   {"border-gray-400 focus:outline-blue-600": person.errors[:status_id].none?, 
+                    "border-red-400 focus:outline-red-600": person.errors[:status_id].any?}],
+            placeholder: "Enter new status name" %>
+      </div>
+    </div>
+  </div>
+
+  <%= form.fields_for :address do |address_form| %>
+    <div class="my-5">
+      <%= address_form.label :street %>
+      <%= address_form.text_field :street, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": person.errors[:address].blank? || person.errors[:"address.street"].blank?, 
+                  "border-red-400 focus:outline-red-600": person.errors[:address].present? && person.errors[:"address.street"].present?}] %>
+    </div>
+
+    <div class="my-5">
+      <%= address_form.label :number %>
+      <%= address_form.text_field :number, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": person.errors[:address].blank? || person.errors[:"address.number"].blank?, 
+                  "border-red-400 focus:outline-red-600": person.errors[:address].present? && person.errors[:"address.number"].present?}] %>
+    </div>
+
+    <div class="my-5">
+      <%= address_form.label :town %>
+      <%= address_form.text_field :town, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": person.errors[:address].blank? || person.errors[:"address.town"].blank?, 
+                  "border-red-400 focus:outline-red-600": person.errors[:address].present? && person.errors[:"address.town"].present?}] %>
+    </div>
+
+    <div class="my-5">
+      <%= address_form.label :zip %>
+      <%= address_form.text_field :zip, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": person.errors[:address].blank? || person.errors[:"address.zip"].blank?, 
+                  "border-red-400 focus:outline-red-600": person.errors[:address].present? && person.errors[:"address.zip"].present?}] %>
+    </div>
+  <% end %>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>
+
+<%= turbo_frame_tag "modal" %>

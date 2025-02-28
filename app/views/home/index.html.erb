@@ -1,0 +1,27 @@
+<div class="space-y-6">
+  <div class="bg-white shadow rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-6">
+      Welcome, <%= current_person&.full_name || "Guest" %>
+    </h1>
+    
+    <% if current_person %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% dashboard = DashboardPresenter.new(current_person) %>
+        <% dashboard.sections.each do |section| %>
+          <%= render 'shared/dashboard_section',
+              title: section[:title],
+              description: section[:description],
+              path: send(section[:path]),
+              color: section[:color],
+              icon: section[:icon] %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center">
+        <p class="text-gray-600 mb-6">Please log in to access the school management system.</p>
+        <%= link_to "Log In", new_session_path(:person), 
+            class: "inline-block bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
+  </div>
+</div>
