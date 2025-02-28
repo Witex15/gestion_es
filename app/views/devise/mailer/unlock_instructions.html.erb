@@ -1,0 +1,17 @@
+<div class="max-w-md mx-auto p-6 bg-white rounded shadow">
+  <p class="text-xl font-bold text-gray-800 mb-4">
+    Hello <%= @resource.email %>!
+  </p>
+
+  <p class="text-gray-700 mb-4">
+    Your account has been locked due to an excessive number of unsuccessful sign in attempts.
+  </p>
+
+  <p class="text-gray-700 mb-4">
+    Click the link below to unlock your account:
+  </p>
+
+  <p class="text-center">
+    <%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token), class: "inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </p>
+</div>

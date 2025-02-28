@@ -1,4 +1,28 @@
 Rails.application.routes.draw do
+  get "home/index"
+  devise_for :people, skip: [:registrations]
+  resources :grades
+  resources :examinations
+  resources :courses
+  resources :school_classes
+  resources :subjects
+  resources :promotion_asserts
+  resources :moments
+  resources :sectors
+  resources :people
+  resources :statuses do
+    collection do
+      get :search
+    end
+  end
+  resources :rooms
+  resources :addresses do
+    collection do
+      get :search
+    end
+  end
+  
+  root "home#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
