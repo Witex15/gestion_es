@@ -1,5 +1,5 @@
 class SchoolClassesController < ApplicationController
-  before_action :set_school_class, only: %i[ show edit update destroy ]
+  before_action :set_school_class, only: %i[ show edit update destroy manage_students update_students ]
 
   # GET /school_classes or /school_classes.json
   def index
@@ -17,6 +17,30 @@ class SchoolClassesController < ApplicationController
 
   # GET /school_classes/1/edit
   def edit
+  end
+
+  # GET /school_classes/1/manage_students
+  def manage_students
+    @available_students = Person.where(role: :student)
+    @enrolled_students = @school_class.students
+  end
+
+  # POST /school_classes/1/update_students
+  def update_students
+    student_ids = params[:student_ids] || []
+    
+    # Remove all current enrollments
+    @school_class.students_classes.destroy_all
+    
+    # Add new enrollments
+    student_ids.each do |student_id|
+      @school_class.students_classes.create(student_id: student_id)
+    end
+    
+    redirect_to @school_class, notice: "Student enrollments updated successfully."
+  rescue => e
+    redirect_to manage_students_school_class_path(@school_class), 
+                alert: "Error updating enrollments: #{e.message}"
   end
 
   # POST /school_classes or /school_classes.json
@@ -65,6 +89,6 @@ class SchoolClassesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def school_class_params
-      params.expect(school_class: [ :uid, :name, :moment_id, :room_id, :master_id, :sector_id ])
+      params.require(:school_class).permit(:name, :moment_id, :room_id, :master_id, :sector_id)
     end
 end

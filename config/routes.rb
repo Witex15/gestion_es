@@ -1,10 +1,23 @@
 Rails.application.routes.draw do
   get "home/index"
   devise_for :people, skip: [:registrations]
-  resources :grades
-  resources :examinations
+  resources :grades do
+    collection do
+      get 'students_for_examination/:examination_id', action: :students_for_examination, as: :students_for_examination
+    end
+  end
+  resources :examinations do
+    member do
+      get 'students'
+    end
+  end
   resources :courses
-  resources :school_classes
+  resources :school_classes do
+    member do
+      get 'manage_students'
+      post 'update_students'
+    end
+  end
   resources :subjects
   resources :promotion_asserts
   resources :moments
