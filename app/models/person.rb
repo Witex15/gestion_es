@@ -5,9 +5,19 @@ class Person < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  # Allow password to be optional on update
+  def password_required?
+    new_record? || password.present? || password_confirmation.present?
+  end
+  
   enum :role, { student: 0, teacher: 1, dean: 2 }
   belongs_to :status
   belongs_to :address
+  
+  # Student associations
+  has_many :students_classes, foreign_key: :student_id
+  has_many :school_classes, through: :students_classes
   
   accepts_nested_attributes_for :address
   
