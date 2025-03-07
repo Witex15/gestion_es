@@ -1,5 +1,5 @@
 class ExaminationsController < ApplicationController
-  before_action :set_examination, only: %i[ show edit update destroy ]
+  before_action :set_examination, only: %i[ show edit update destroy students ]
 
   # GET /examinations or /examinations.json
   def index
@@ -57,10 +57,30 @@ class ExaminationsController < ApplicationController
     end
   end
 
+  # GET /examinations/:id/students
+  def students
+    begin
+      @examination = Examination.includes(course: { school_class: :students_classes }).find(params[:id])
+      @students = @examination.course.school_class.students_classes.includes(:student)
+                            .joins(:student)
+                            .where(students: { role: :student })
+                            .map(&:student)
+      
+      Rails.logger.debug "Found examination: #{@examination.inspect}"
+      Rails.logger.debug "School class: #{@examination.course.school_class.inspect}"
+      Rails.logger.debug "Found students: #{@students.inspect}"
+      
+      render json: @students.map { |student| { id: student.id, full_name: student.full_name } }
+    rescue => e
+      Rails.logger.error "Error in students action: #{e.message}\n#{e.backtrace.join("\n")}"
+      render json: { error: "Could not load students: #{e.message}" }, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_examination
-      @examination = Examination.find(params.expect(:id))
+      @examination = Examination.includes(course: { school_class: :students_classes }).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

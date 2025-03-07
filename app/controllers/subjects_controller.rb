@@ -65,6 +65,6 @@ class SubjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def subject_params
-      params.expect(subject: [ :slug, :name, :teacher_id ])
+      params.expect(subject: [ :slug, :name ])
     end
 end
