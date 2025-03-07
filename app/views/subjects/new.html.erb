@@ -1,9 +1,16 @@
 <% content_for :title, "New subject" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New subject</h1>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center py-8">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold text-gray-900">New Subject</h1>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <%= link_to "Back to subjects", subjects_path, class: "inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto" %>
+    </div>
+  </div>
 
-  <%= render "form", subject: @subject %>
-
-  <%= link_to "Back to subjects", subjects_path, class: "ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="mt-8">
+    <%= render "form", subject: @subject %>
+  </div>
 </div>
