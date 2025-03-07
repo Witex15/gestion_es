@@ -19,7 +19,6 @@ class SchoolClassesTest < ApplicationSystemTestCase
     fill_in "Name", with: @school_class.name
     fill_in "Room", with: @school_class.room_id
     fill_in "Sector", with: @school_class.sector_id
-    fill_in "Uid", with: @school_class.uid
     click_on "Create School class"
 
     assert_text "School class was successfully created"
@@ -35,7 +34,6 @@ class SchoolClassesTest < ApplicationSystemTestCase
     fill_in "Name", with: @school_class.name
     fill_in "Room", with: @school_class.room_id
     fill_in "Sector", with: @school_class.sector_id
-    fill_in "Uid", with: @school_class.uid
     click_on "Update School class"
 
     assert_text "School class was successfully updated"

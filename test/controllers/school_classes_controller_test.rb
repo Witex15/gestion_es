@@ -17,7 +17,7 @@ class SchoolClassesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create school_class" do
     assert_difference("SchoolClass.count") do
-      post school_classes_url, params: { school_class: { master_id: @school_class.master_id, moment_id: @school_class.moment_id, name: @school_class.name, room_id: @school_class.room_id, sector_id: @school_class.sector_id, uid: @school_class.uid } }
+      post school_classes_url, params: { school_class: { master_id: @school_class.master_id, moment_id: @school_class.moment_id, name: @school_class.name, room_id: @school_class.room_id, sector_id: @school_class.sector_id } }
     end
 
     assert_redirected_to school_class_url(SchoolClass.last)
@@ -34,7 +34,7 @@ class SchoolClassesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update school_class" do
-    patch school_class_url(@school_class), params: { school_class: { master_id: @school_class.master_id, moment_id: @school_class.moment_id, name: @school_class.name, room_id: @school_class.room_id, sector_id: @school_class.sector_id, uid: @school_class.uid } }
+    patch school_class_url(@school_class), params: { school_class: { master_id: @school_class.master_id, moment_id: @school_class.moment_id, name: @school_class.name, room_id: @school_class.room_id, sector_id: @school_class.sector_id } }
     assert_redirected_to school_class_url(@school_class)
   end
 
