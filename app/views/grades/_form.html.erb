@@ -1,37 +1,119 @@
 <%= form_with(model: grade, class: "contents") do |form| %>
   <% if grade.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(grade.errors.count, "error") %> prohibited this grade from being saved:</h2>
-
-      <ul class="list-disc ml-6">
-        <% grade.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="rounded-md bg-red-50 p-4 mb-6">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(grade.errors.count, "error") %> prohibited this grade from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+              <% grade.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :value %>
-    <%= form.number_field :value, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": grade.errors[:value].none?, "border-red-400 focus:outline-red-600": grade.errors[:value].any?}] %>
+  <div class="space-y-6 sm:space-y-5">
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+      <label for="examination_id" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+        Examination
+      </label>
+      <div class="mt-1 sm:col-span-2 sm:mt-0">
+        <%= form.select :examination_id,
+          @examinations.map { |e| [e.title, e.id] },
+          { prompt: "Select an examination" },
+          class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" %>
+      </div>
+    </div>
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+      <label for="student_id" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+        Student
+      </label>
+      <div class="mt-1 sm:col-span-2 sm:mt-0">
+        <%= form.select :student_id,
+          @students.map { |s| [s.full_name, s.id] },
+          { prompt: "Select a student" },
+          class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" %>
+      </div>
+    </div>
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+      <label for="value" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+        Grade Value
+      </label>
+      <div class="mt-1 sm:col-span-2 sm:mt-0">
+        <%= form.number_field :value,
+          step: :any,
+          class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm",
+          placeholder: "Enter grade value" %>
+      </div>
+    </div>
+
+    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+      <label for="execute_on" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+        Date
+      </label>
+      <div class="mt-1 sm:col-span-2 sm:mt-0">
+        <%= form.date_field :execute_on,
+          class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" %>
+      </div>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :execute_on %>
-    <%= form.date_field :execute_on, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": grade.errors[:execute_on].none?, "border-red-400 focus:outline-red-600": grade.errors[:execute_on].any?}] %>
+  <div class="pt-5">
+    <div class="flex justify-end space-x-3">
+      <%= link_to "Cancel", grades_path, class: "rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+      <%= form.submit class: "inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+    </div>
   </div>
+<% end %>
 
-  <div class="my-5">
-    <%= form.label :examination_id %>
-    <%= form.text_field :examination_id, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": grade.errors[:examination_id].none?, "border-red-400 focus:outline-red-600": grade.errors[:examination_id].any?}] %>
-  </div>
+<%= content_for :head do %>
+  <%= javascript_tag do %>
+    document.addEventListener("turbo:load", function() {
+      const examinationSelect = document.querySelector('select[name="grade[examination_id]"]');
+      const studentSelect = document.querySelector('select[name="grade[student_id]"]');
 
-  <div class="my-5">
-    <%= form.label :student_id %>
-    <%= form.text_field :student_id, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": grade.errors[:student_id].none?, "border-red-400 focus:outline-red-600": grade.errors[:student_id].any?}] %>
-  </div>
+      if (examinationSelect && studentSelect) {
+        examinationSelect.addEventListener('change', function() {
+          const examinationId = this.value;
+          studentSelect.disabled = !examinationId;
+          studentSelect.innerHTML = '<option value="">Select a student</option>';
 
-  <div class="inline">
-    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
+          if (examinationId) {
+            fetch(`/grades/students_for_examination/${examinationId}`)
+              .then(response => response.json())
+              .then(students => {
+                students.forEach(student => {
+                  const option = document.createElement('option');
+                  option.value = student.id;
+                  option.textContent = student.name;
+                  studentSelect.appendChild(option);
+                });
+              })
+              .catch(error => {
+                console.error('Error loading students:', error);
+                studentSelect.innerHTML = '<option value="">Error loading students</option>';
+              });
+          }
+        });
+
+        // Initialize student select if examination is already selected
+        if (examinationSelect.value) {
+          examinationSelect.dispatchEvent(new Event('change'));
+        }
+      }
+    });
+  <% end %>
 <% end %>
