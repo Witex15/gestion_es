@@ -51,10 +51,47 @@ module.exports = {
     // Border colors
     'border-gray-200',
     'border-gray-300',
+    'border-gray-400',
+    'border-red-300',
+    'border-red-400',
     'border-red-500',
     'border-green-500',
     'border-blue-500',
-    'border-yellow-500'
+    'border-yellow-500',
+
+    // Form related
+    'focus:border-blue-500',
+    'focus:ring-blue-500',
+    'focus:ring-offset-2',
+    'focus:ring-2',
+    'focus:outline-none',
+    'focus:outline-blue-600',
+    'focus:outline-red-600',
+    'outline-hidden',
+    'focus:ring',
+    'focus:ring-opacity-50',
+    'border-gray-300',
+    'rounded-md',
+    'shadow-sm',
+    'block',
+    'mt-1',
+    'mt-2',
+    'mt-3',
+    'my-5',
+    'px-3',
+    'py-2',
+    'w-full',
+    'sm:text-sm',
+    'cursor-pointer',
+    'inline-block',
+    'contents',
+    
+    // Error states
+    'border-red-300',
+    'focus:border-red-500',
+    'focus:ring-red-500',
+    'text-red-900',
+    'placeholder-red-300'
   ],
   theme: {
     extend: {

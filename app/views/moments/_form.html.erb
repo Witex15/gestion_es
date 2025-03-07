@@ -12,26 +12,36 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.label :uid %>
-    <%= form.text_field :uid, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": moment.errors[:uid].none?, "border-red-400 focus:outline-red-600": moment.errors[:uid].any?}] %>
+    <%= form.label :moment_type, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :moment_type, 
+        Moment.moment_types.keys.map { |type| [type.titleize, type] },
+        { prompt: "Select a period type" },
+        class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+               {"border-gray-400 focus:outline-blue-600": moment.errors[:moment_type].none?, 
+                "border-red-400 focus:outline-red-600": moment.errors[:moment_type].any?}] %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :start_on %>
-    <%= form.date_field :start_on, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": moment.errors[:start_on].none?, "border-red-400 focus:outline-red-600": moment.errors[:start_on].any?}] %>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div class="my-5">
+      <%= form.label :start_on, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :start_on, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": moment.errors[:start_on].none?, 
+                  "border-red-400 focus:outline-red-600": moment.errors[:start_on].any?}] %>
+    </div>
+
+    <div class="my-5">
+      <%= form.label :end_on, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :end_on, 
+          class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
+                 {"border-gray-400 focus:outline-blue-600": moment.errors[:end_on].none?, 
+                  "border-red-400 focus:outline-red-600": moment.errors[:end_on].any?}] %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :end_on %>
-    <%= form.date_field :end_on, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": moment.errors[:end_on].none?, "border-red-400 focus:outline-red-600": moment.errors[:end_on].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :moment_type %>
-    <%= form.number_field :moment_type, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": moment.errors[:moment_type].none?, "border-red-400 focus:outline-red-600": moment.errors[:moment_type].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", moments_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <%= form.submit class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
   </div>
 <% end %>
+
