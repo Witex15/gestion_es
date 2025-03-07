@@ -7,7 +7,7 @@ class CreateCourses < ActiveRecord::Migration[8.0]
       t.references :subject, null: false, foreign_key: true
       t.references :school_class, null: false, foreign_key: true
       t.references :moment, null: false, foreign_key: true
-      t.references :teacher, null: false, foreign_key: true
+      t.references :teacher, null: false, foreign_key: { to_table: :people }
       t.integer :week_day
 
       t.timestamps

@@ -106,7 +106,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_28_080519) do
   end
 
   create_table "school_classes", force: :cascade do |t|
-    t.string "uid"
     t.string "name"
     t.integer "moment_id", null: false
     t.integer "room_id", null: false
@@ -146,28 +145,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_28_080519) do
   create_table "subjects", force: :cascade do |t|
     t.string "slug"
     t.string "name"
-    t.integer "teacher_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["teacher_id"], name: "index_subjects_on_teacher_id"
   end
 
   add_foreign_key "courses", "moments"
+  add_foreign_key "courses", "people", column: "teacher_id"
   add_foreign_key "courses", "school_classes"
   add_foreign_key "courses", "subjects"
-  add_foreign_key "courses", "teachers"
   add_foreign_key "examinations", "courses"
   add_foreign_key "grades", "examinations"
-  add_foreign_key "grades", "students"
+  add_foreign_key "grades", "people", column: "student_id"
   add_foreign_key "people", "addresses"
   add_foreign_key "people", "statuses"
   add_foreign_key "promotion_asserts", "moments"
   add_foreign_key "promotion_asserts", "sectors"
-  add_foreign_key "school_classes", "masters"
   add_foreign_key "school_classes", "moments"
+  add_foreign_key "school_classes", "people", column: "master_id"
   add_foreign_key "school_classes", "rooms"
   add_foreign_key "school_classes", "sectors"
+  add_foreign_key "students_classes", "people", column: "student_id"
   add_foreign_key "students_classes", "school_classes"
-  add_foreign_key "students_classes", "students"
-  add_foreign_key "subjects", "teachers"
 end
