@@ -22,8 +22,8 @@
   </div>
 
   <div class="my-5">
-    <%= form.label :course_id %>
-    <%= form.text_field :course_id, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": examination.errors[:course_id].none?, "border-red-400 focus:outline-red-600": examination.errors[:course_id].any?}] %>
+    <%= form.label :course_id, "Course" %>
+    <%= form.collection_select :course_id, Course.all, :id, ->(course) { "#{course.subject.name} - #{course.school_class.name} (#{Date::DAYNAMES[course.week_day]}, #{course.start_at.strftime("%H:%M")} - #{course.end_at.strftime("%H:%M")})" }, { prompt: "Select a course" }, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": examination.errors[:course_id].none?, "border-red-400 focus:outline-red-600": examination.errors[:course_id].any?}] %>
   </div>
 
   <div class="inline">
