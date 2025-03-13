@@ -8,6 +8,7 @@ class PromotionAssertsController < ApplicationController
 
   # GET /promotion_asserts/1 or /promotion_asserts/1.json
   def show
+    @student = Person.find(params[:student_id]) if params[:student_id].present?
   end
 
   # GET /promotion_asserts/new
@@ -25,7 +26,7 @@ class PromotionAssertsController < ApplicationController
 
     respond_to do |format|
       if @promotion_assert.save
-        format.html { redirect_to @promotion_assert, notice: "Promotion assert was successfully created." }
+        format.html { redirect_to promotion_assert_url(@promotion_assert), notice: "Promotion assert was successfully created." }
         format.json { render :show, status: :created, location: @promotion_assert }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +39,7 @@ class PromotionAssertsController < ApplicationController
   def update
     respond_to do |format|
       if @promotion_assert.update(promotion_assert_params)
-        format.html { redirect_to @promotion_assert, notice: "Promotion assert was successfully updated." }
+        format.html { redirect_to promotion_assert_url(@promotion_assert), notice: "Promotion assert was successfully updated." }
         format.json { render :show, status: :ok, location: @promotion_assert }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +53,7 @@ class PromotionAssertsController < ApplicationController
     @promotion_assert.destroy!
 
     respond_to do |format|
-      format.html { redirect_to promotion_asserts_path, status: :see_other, notice: "Promotion assert was successfully destroyed." }
+      format.html { redirect_to promotion_asserts_url, notice: "Promotion assert was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +61,11 @@ class PromotionAssertsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_promotion_assert
-      @promotion_assert = PromotionAssert.find(params.expect(:id))
+      @promotion_assert = PromotionAssert.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def promotion_assert_params
-      params.expect(promotion_assert: [ :description, :function, :moment_id, :sector_id ])
+      params.require(:promotion_assert).permit(:description, :function, :moment_id, :sector_id)
     end
 end
