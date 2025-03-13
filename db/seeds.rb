@@ -112,7 +112,7 @@ end
 # Create Students
 puts "Creating students..."
 students = []
-20.times do
+20.times do |i|
   students << Person.create!(
     username: Faker::Internet.unique.username,
     lastname: Faker::Name.last_name,
@@ -127,31 +127,36 @@ students = []
   )
 end
 
-# Create School Classes
+# Create School Classes for each moment
 puts "Creating school classes..."
 school_classes = []
-sectors.each do |sector|
-  2.times do |i|
-    school_classes << SchoolClass.create!(
-      name: "#{sector.name[0..2]}-#{i + 1}",
-      moment: moments.first,
-      room: rooms.sample,
-      master: teachers.sample,
-      sector: sector
+moments.each do |moment|
+  sectors.each do |sector|
+    2.times do |i|
+      school_classes << SchoolClass.create!(
+        name: "#{sector.name[0..2]}-#{i + 1}-#{moment.uid}",
+        moment: moment,
+        room: rooms.sample,
+        master: teachers.sample,
+        sector: sector
+      )
+    end
+  end
+end
+
+# Assign Students to Classes (ensure each student is in a class for each moment)
+puts "Assigning students to classes..."
+students.each do |student|
+  moments.each do |moment|
+    available_classes = school_classes.select { |sc| sc.moment_id == moment.id }
+    StudentsClass.create!(
+      student: student,
+      school_class: available_classes.sample
     )
   end
 end
 
-# Assign Students to Classes
-puts "Assigning students to classes..."
-students.each do |student|
-  StudentsClass.create!(
-    student: student,
-    school_class: school_classes.sample
-  )
-end
-
-# Create Courses
+# Create Courses for all moments
 puts "Creating courses..."
 courses = []
 school_classes.each do |school_class|
@@ -162,14 +167,14 @@ school_classes.each do |school_class|
       archived: false,
       subject: subject,
       school_class: school_class,
-      moment: moments.first,
+      moment: school_class.moment,
       teacher: teachers.sample,
       week_day: rand(1..5)
     )
   end
 end
 
-# Create Examinations and Grades
+# Create Examinations and Grades with controlled grade distribution
 puts "Creating examinations and grades..."
 courses.each do |course|
   2.times do |i|
@@ -179,10 +184,21 @@ courses.each do |course|
       course: course
     )
     
-    # Create grades for each student in the class
+    # Create grades for each student in the class with controlled distribution
     course.school_class.students.each do |student|
+      # First 5 students get good grades (4.5-6.0)
+      # Next 10 students get average grades (4.0-5.0)
+      # Last 5 students get lower grades (3.0-4.5)
+      grade_value = if student.id % 20 < 5
+                     rand(4.5..6.0).round(1)  # Top performers
+                   elsif student.id % 20 < 15
+                     rand(4.0..5.0).round(1)  # Average performers
+                   else
+                     rand(3.0..4.5).round(1)  # Struggling students
+                   end
+      
       Grade.create!(
-        value: rand(1..6),
+        value: grade_value,
         execute_on: examination.effective_date,
         examination: examination,
         student: student
@@ -197,7 +213,7 @@ sectors.each do |sector|
   moments.each do |moment|
     PromotionAssert.create!(
       description: "#{sector.name} requirements for #{moment.uid}",
-      function: "min_grade_4",
+      function: ['average_min_4', 'average_min_4.5', 'average_min_5', 'all_passed'].sample,
       moment: moment,
       sector: sector
     )
