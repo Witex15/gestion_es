@@ -1,9 +1,9 @@
 <%= form_with(model: promotion_assert, class: "contents") do |form| %>
   <% if promotion_assert.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(promotion_assert.errors.count, "error") %> prohibited this promotion_assert from being saved:</h2>
+    <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md">
+      <h2><%= pluralize(promotion_assert.errors.count, "error") %> prohibited this promotion assert from being saved:</h2>
 
-      <ul class="list-disc ml-6">
+      <ul>
         <% promotion_assert.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,27 +11,63 @@
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :description %>
-    <%= form.text_field :description, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": promotion_assert.errors[:description].none?, "border-red-400 focus:outline-red-600": promotion_assert.errors[:description].any?}] %>
+  <div class="space-y-8 divide-y divide-gray-200">
+    <div class="space-y-6 sm:space-y-5">
+      <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+        <label for="description" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+          Description
+        </label>
+        <div class="mt-1 sm:col-span-2 sm:mt-0">
+          <%= form.text_field :description, class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" %>
+        </div>
+      </div>
+
+      <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+        <label for="function" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+          Function
+        </label>
+        <div class="mt-1 sm:col-span-2 sm:mt-0">
+          <%= form.select :function, 
+              [
+                ['Average grade ≥ 4.0', 'average_min_4'],
+                ['Average grade ≥ 4.5', 'average_min_4.5'],
+                ['Average grade ≥ 5.0', 'average_min_5'],
+                ['All grades ≥ 4.0', 'all_passed']
+              ],
+              { prompt: "Select promotion criteria" },
+              { class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" } %>
+        </div>
+      </div>
+
+      <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+        <label for="moment_id" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+          Academic Period
+        </label>
+        <div class="mt-1 sm:col-span-2 sm:mt-0">
+          <%= form.collection_select :moment_id, Moment.all, :id, :uid,
+            { prompt: "Select academic period" },
+            { class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" } %>
+        </div>
+      </div>
+
+      <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+        <label for="sector_id" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+          Sector
+        </label>
+        <div class="mt-1 sm:col-span-2 sm:mt-0">
+          <%= form.collection_select :sector_id, Sector.all, :id, :name,
+            { prompt: "Select sector" },
+            { class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" } %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :function %>
-    <%= form.text_field :function, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": promotion_assert.errors[:function].none?, "border-red-400 focus:outline-red-600": promotion_assert.errors[:function].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :moment_id %>
-    <%= form.text_field :moment_id, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": promotion_assert.errors[:moment_id].none?, "border-red-400 focus:outline-red-600": promotion_assert.errors[:moment_id].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :sector_id %>
-    <%= form.text_field :sector_id, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": promotion_assert.errors[:sector_id].none?, "border-red-400 focus:outline-red-600": promotion_assert.errors[:sector_id].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <div class="pt-5">
+    <div class="flex justify-end gap-3">
+      <%= link_to "Cancel", promotion_asserts_path, class: "rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+      
+      <%= form.submit class: "inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+    </div>
   </div>
 <% end %>
