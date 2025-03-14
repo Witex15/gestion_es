@@ -70,39 +70,59 @@
               <%= link_to "Dashboard", root_path, 
                   class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{current_page?(root_path) ? 'border-b-2 border-indigo-500' : ''}" %>
               
-              <%= link_to "Classes", school_classes_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'school_classes' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(SchoolClass).index? %>
+                <%= link_to "Classes", school_classes_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'school_classes' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Courses", courses_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'courses' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(Course).index? %>
+                <%= link_to "Courses", courses_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'courses' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Grades", grades_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'grades' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(Grade).index? %>
+                <%= link_to "Grades", grades_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'grades' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Examinations", examinations_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'examinations' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(Examination).index? %>
+                <%= link_to "Examinations", examinations_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'examinations' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Subjects", subjects_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'subjects' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(Subject).index? %>
+                <%= link_to "Subjects", subjects_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'subjects' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Rooms", rooms_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'rooms' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% if policy(Person).index? %>
+                <%= link_to "People", people_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'people' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
               
-              <%= link_to "Users", people_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'people' ? 'border-b-2 border-indigo-500' : ''}" %>
-
-              <%= link_to "Sectors", sectors_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'sectors' ? 'border-b-2 border-indigo-500' : ''}" %>
-
-              <%= link_to "Reports", reports_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'reports' ? 'border-b-2 border-indigo-500' : ''}" %>
-
-              <%= link_to "Promotion Asserts", promotion_asserts_path,
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'promotion_asserts' ? 'border-b-2 border-indigo-500' : ''}" %>
-
-              <% if current_person.dean? %>
+              <% if policy(Room).index? %>
+                <%= link_to "Rooms", rooms_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'rooms' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
+              
+              <% if policy(Sector).index? %>
+                <%= link_to "Sectors", sectors_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'sectors' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
+              
+              <% if policy(Moment).index? %>
                 <%= link_to "Academic Periods", moments_path,
                     class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'moments' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
+              
+              <% if policy(PromotionAssert).index? %>
+                <%= link_to "Promotion Rules", promotion_asserts_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'promotion_asserts' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
+              
+              <% if policy(:report).index? %>
+                <%= link_to "Reports", reports_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'reports' ? 'border-b-2 border-indigo-500' : ''}" %>
               <% end %>
             </div>
           </div>
