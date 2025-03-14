@@ -3,25 +3,30 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @courses = Course.all
+    @courses = policy_scope(Course)
+    authorize Course
   end
 
   # GET /courses/1 or /courses/1.json
   def show
+    authorize @course
   end
 
   # GET /courses/new
   def new
     @course = Course.new
+    authorize @course
   end
 
   # GET /courses/1/edit
   def edit
+    authorize @course
   end
 
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
+    authorize @course
 
     respond_to do |format|
       if @course.save
@@ -36,6 +41,8 @@ class CoursesController < ApplicationController
 
   # PATCH/PUT /courses/1 or /courses/1.json
   def update
+    authorize @course
+    
     respond_to do |format|
       if @course.update(course_params)
         format.html { redirect_to @course, notice: "Course was successfully updated." }
@@ -49,6 +56,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/1 or /courses/1.json
   def destroy
+    authorize @course
     @course.destroy!
 
     respond_to do |format|
@@ -60,11 +68,11 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find(params.expect(:id))
+      @course = Course.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.expect(course: [ :start_at, :end_at, :archived, :subject_id, :school_class_id, :moment_id, :teacher_id, :week_day ])
+      params.require(:course).permit(:start_at, :end_at, :archived, :subject_id, :school_class_id, :moment_id, :teacher_id, :week_day)
     end
 end

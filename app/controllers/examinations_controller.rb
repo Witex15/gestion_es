@@ -3,25 +3,30 @@ class ExaminationsController < ApplicationController
 
   # GET /examinations or /examinations.json
   def index
-    @examinations = Examination.all
+    @examinations = policy_scope(Examination)
+    authorize Examination
   end
 
   # GET /examinations/1 or /examinations/1.json
   def show
+    authorize @examination
   end
 
   # GET /examinations/new
   def new
     @examination = Examination.new
+    authorize @examination
   end
 
   # GET /examinations/1/edit
   def edit
+    authorize @examination
   end
 
   # POST /examinations or /examinations.json
   def create
     @examination = Examination.new(examination_params)
+    authorize @examination
 
     respond_to do |format|
       if @examination.save
@@ -36,6 +41,8 @@ class ExaminationsController < ApplicationController
 
   # PATCH/PUT /examinations/1 or /examinations/1.json
   def update
+    authorize @examination
+    
     respond_to do |format|
       if @examination.update(examination_params)
         format.html { redirect_to @examination, notice: "Examination was successfully updated." }
@@ -49,6 +56,8 @@ class ExaminationsController < ApplicationController
 
   # DELETE /examinations/1 or /examinations/1.json
   def destroy
+    authorize @examination
+    
     @examination.destroy!
 
     respond_to do |format|
@@ -59,8 +68,9 @@ class ExaminationsController < ApplicationController
 
   # GET /examinations/:id/students
   def students
+    authorize @examination, :show?
+    
     begin
-      @examination = Examination.includes(course: { school_class: :students_classes }).find(params[:id])
       @students = @examination.course.school_class.students_classes.includes(:student)
                             .joins(:student)
                             .where(students: { role: :student })
@@ -85,6 +95,6 @@ class ExaminationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def examination_params
-      params.expect(examination: [ :title, :effective_date, :course_id ])
+      params.require(:examination).permit(:title, :effective_date, :course_id)
     end
 end

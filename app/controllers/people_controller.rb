@@ -2,49 +2,37 @@
 
 class PeopleController < ApplicationController
   skip_before_action :authenticate_person!, only: [:new, :create], if: :first_user_creation?
-  before_action :set_person, only: %i[ show edit update destroy ]
-  before_action :authorize_user_management, except: [:show]
+  before_action :set_person, only: %i[show edit update destroy]
+  before_action :authorize_user_management, except: [:index, :show]
   before_action :load_statuses, only: [:new, :edit, :create, :update]
+  
   # GET /people or /people.json
   def index
-    @people = Person.all
+    @people = policy_scope(Person)
+    authorize Person
   end
 
   # GET /people/1 or /people/1.json
   def show
-    unless current_person == @person || current_person&.can_manage_users?
-      redirect_to root_path, alert: "You are not authorized to view this profile."
-    end
+    authorize @person
   end
 
   # GET /people/new
   def new
-    if !current_person&.can_manage_users? && !first_user_creation?
-      redirect_to root_path, alert: "You are not authorized to create new users."
-      return
-    end
-    
     @person = Person.new
     @person.build_address
+    authorize @person
   end
 
   # GET /people/1/edit
   def edit
+    authorize @person
   end
 
   # POST /people or /people.json
   def create
-    if !current_person&.can_manage_users? && !first_user_creation?
-      redirect_to root_path, alert: "You are not authorized to create new users."
-      return
-    end
-
     @person = Person.new(person_params)
-    
-    # Skip role validation for first user or if user has permission
-    unless Person.count.zero? || current_person&.can_manage_role?(@person.role)
-      return redirect_to people_path, alert: "You are not authorized to create users with this role."
-    end
+    authorize @person
 
     # Make first user a dean
     @person.role = :dean if Person.count.zero?
@@ -62,9 +50,11 @@ class PeopleController < ApplicationController
 
   # PATCH/PUT /people/1 or /people/1.json
   def update
-    # Prevent role escalation
-    if person_params[:role].present? && !current_person&.can_manage_role?(person_params[:role])
-      return redirect_to people_path, alert: "You are not authorized to assign this role."
+    authorize @person
+    
+    # Only allow role changes if user has permission
+    if person_params[:role].present?
+      authorize @person, :manage_role?
     end
 
     respond_to do |format|
@@ -80,11 +70,7 @@ class PeopleController < ApplicationController
 
   # DELETE /people/1 or /people/1.json
   def destroy
-    # Prevent deletion of last dean
-    if @person.dean? && Person.where(role: :dean).count <= 1
-      return redirect_to people_path, alert: "Cannot delete the last dean account."
-    end
-
+    authorize @person
     @person.destroy!
 
     respond_to do |format|
@@ -94,12 +80,10 @@ class PeopleController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_person
       @person = Person.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def person_params
       params.require(:person).permit(
         :username, :lastname, :firstname, :email, 

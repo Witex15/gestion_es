@@ -5,22 +5,26 @@ class StatusesController < ApplicationController
 
   # Interface Segregation Principle: Separate search functionality
   def search
+    authorize Status, :search?
     @statuses = StatusSearchService.call(params[:query])
     render json: @statuses
   end
 
   # GET /statuses or /statuses.json
   def index
-    @statuses = Status.all
+    @statuses = policy_scope(Status)
+    authorize Status
   end
 
   # GET /statuses/1 or /statuses/1.json
   def show
+    authorize @status
   end
 
   # GET /statuses/new
   def new
     @status = Status.new
+    authorize @status
     
     respond_to do |format|
       format.html
@@ -30,11 +34,13 @@ class StatusesController < ApplicationController
 
   # GET /statuses/1/edit
   def edit
+    authorize @status
   end
 
   # POST /statuses or /statuses.json
   def create
     @status = Status.new(status_params)
+    authorize @status
 
     respond_to do |format|
       if @status.save
@@ -55,6 +61,8 @@ class StatusesController < ApplicationController
 
   # PATCH/PUT /statuses/1 or /statuses/1.json
   def update
+    authorize @status
+    
     respond_to do |format|
       if @status.update(status_params)
         format.html { redirect_to @status, notice: "Status was successfully updated." }
@@ -68,6 +76,8 @@ class StatusesController < ApplicationController
 
   # DELETE /statuses/1 or /statuses/1.json
   def destroy
+    authorize @status
+    
     @status.destroy!
 
     respond_to do |format|

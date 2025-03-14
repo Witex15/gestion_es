@@ -3,25 +3,30 @@ class SectorsController < ApplicationController
 
   # GET /sectors or /sectors.json
   def index
-    @sectors = Sector.all
+    @sectors = policy_scope(Sector)
+    authorize Sector
   end
 
   # GET /sectors/1 or /sectors/1.json
   def show
+    authorize @sector
   end
 
   # GET /sectors/new
   def new
     @sector = Sector.new
+    authorize @sector
   end
 
   # GET /sectors/1/edit
   def edit
+    authorize @sector
   end
 
   # POST /sectors or /sectors.json
   def create
     @sector = Sector.new(sector_params)
+    authorize @sector
 
     respond_to do |format|
       if @sector.save
@@ -36,6 +41,8 @@ class SectorsController < ApplicationController
 
   # PATCH/PUT /sectors/1 or /sectors/1.json
   def update
+    authorize @sector
+    
     respond_to do |format|
       if @sector.update(sector_params)
         format.html { redirect_to @sector, notice: "Sector was successfully updated." }
@@ -49,6 +56,8 @@ class SectorsController < ApplicationController
 
   # DELETE /sectors/1 or /sectors/1.json
   def destroy
+    authorize @sector
+    
     @sector.destroy!
 
     respond_to do |format|
@@ -60,11 +69,11 @@ class SectorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector
-      @sector = Sector.find(params.expect(:id))
+      @sector = Sector.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def sector_params
-      params.expect(sector: [ :name ])
+      params.require(:sector).permit(:name)
     end
 end

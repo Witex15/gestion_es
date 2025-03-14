@@ -3,26 +3,31 @@ class PromotionAssertsController < ApplicationController
 
   # GET /promotion_asserts or /promotion_asserts.json
   def index
-    @promotion_asserts = PromotionAssert.all
+    @promotion_asserts = policy_scope(PromotionAssert)
+    authorize PromotionAssert
   end
 
   # GET /promotion_asserts/1 or /promotion_asserts/1.json
   def show
+    authorize @promotion_assert
     @student = Person.find(params[:student_id]) if params[:student_id].present?
   end
 
   # GET /promotion_asserts/new
   def new
     @promotion_assert = PromotionAssert.new
+    authorize @promotion_assert
   end
 
   # GET /promotion_asserts/1/edit
   def edit
+    authorize @promotion_assert
   end
 
   # POST /promotion_asserts or /promotion_asserts.json
   def create
     @promotion_assert = PromotionAssert.new(promotion_assert_params)
+    authorize @promotion_assert
 
     respond_to do |format|
       if @promotion_assert.save
@@ -37,6 +42,8 @@ class PromotionAssertsController < ApplicationController
 
   # PATCH/PUT /promotion_asserts/1 or /promotion_asserts/1.json
   def update
+    authorize @promotion_assert
+    
     respond_to do |format|
       if @promotion_assert.update(promotion_assert_params)
         format.html { redirect_to promotion_assert_url(@promotion_assert), notice: "Promotion assert was successfully updated." }
@@ -50,6 +57,8 @@ class PromotionAssertsController < ApplicationController
 
   # DELETE /promotion_asserts/1 or /promotion_asserts/1.json
   def destroy
+    authorize @promotion_assert
+    
     @promotion_assert.destroy!
 
     respond_to do |format|

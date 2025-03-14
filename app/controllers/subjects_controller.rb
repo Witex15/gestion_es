@@ -3,25 +3,30 @@ class SubjectsController < ApplicationController
 
   # GET /subjects or /subjects.json
   def index
-    @subjects = Subject.all
+    @subjects = policy_scope(Subject)
+    authorize Subject
   end
 
   # GET /subjects/1 or /subjects/1.json
   def show
+    authorize @subject
   end
 
   # GET /subjects/new
   def new
     @subject = Subject.new
+    authorize @subject
   end
 
   # GET /subjects/1/edit
   def edit
+    authorize @subject
   end
 
   # POST /subjects or /subjects.json
   def create
     @subject = Subject.new(subject_params)
+    authorize @subject
 
     respond_to do |format|
       if @subject.save
@@ -36,6 +41,8 @@ class SubjectsController < ApplicationController
 
   # PATCH/PUT /subjects/1 or /subjects/1.json
   def update
+    authorize @subject
+    
     respond_to do |format|
       if @subject.update(subject_params)
         format.html { redirect_to @subject, notice: "Subject was successfully updated." }
@@ -49,6 +56,7 @@ class SubjectsController < ApplicationController
 
   # DELETE /subjects/1 or /subjects/1.json
   def destroy
+    authorize @subject
     @subject.destroy!
 
     respond_to do |format|
@@ -60,11 +68,11 @@ class SubjectsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subject
-      @subject = Subject.find(params.expect(:id))
+      @subject = Subject.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def subject_params
-      params.expect(subject: [ :slug, :name ])
+      params.require(:subject).permit(:slug, :name)
     end
 end

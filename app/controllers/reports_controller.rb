@@ -2,6 +2,7 @@ class ReportsController < ApplicationController
   before_action :authenticate_person!
 
   def index
+    authorize :report
     @moments = Moment.all.order(start_on: :desc)
     
     @grades = case current_person.role

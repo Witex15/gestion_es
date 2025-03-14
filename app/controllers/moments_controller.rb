@@ -1,28 +1,32 @@
 class MomentsController < ApplicationController
-  before_action :require_dean
   before_action :set_moment, only: %i[ show edit update destroy ]
 
   # GET /moments or /moments.json
   def index
-    @moments = Moment.all.order(start_on: :desc)
+    @moments = policy_scope(Moment).order(start_on: :desc)
+    authorize Moment
   end
 
   # GET /moments/1 or /moments/1.json
   def show
+    authorize @moment
   end
 
   # GET /moments/new
   def new
     @moment = Moment.new
+    authorize @moment
   end
 
   # GET /moments/1/edit
   def edit
+    authorize @moment
   end
 
   # POST /moments or /moments.json
   def create
     @moment = Moment.new(moment_params)
+    authorize @moment
 
     respond_to do |format|
       if @moment.save
@@ -37,6 +41,8 @@ class MomentsController < ApplicationController
 
   # PATCH/PUT /moments/1 or /moments/1.json
   def update
+    authorize @moment
+    
     respond_to do |format|
       if @moment.update(moment_params)
         format.html { redirect_to moments_path, notice: "#{@moment.moment_type.titleize} was successfully updated." }
@@ -50,6 +56,8 @@ class MomentsController < ApplicationController
 
   # DELETE /moments/1 or /moments/1.json
   def destroy
+    authorize @moment
+    
     moment_type = @moment.moment_type.titleize
     @moment.destroy!
 
@@ -60,13 +68,6 @@ class MomentsController < ApplicationController
   end
 
   private
-    def require_dean
-      unless current_person&.dean?
-        flash[:alert] = "Only deans can manage academic periods."
-        redirect_to root_path
-      end
-    end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_moment
       @moment = Moment.find(params[:id])

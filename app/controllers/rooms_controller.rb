@@ -3,25 +3,30 @@ class RoomsController < ApplicationController
 
   # GET /rooms or /rooms.json
   def index
-    @rooms = Room.all
+    @rooms = policy_scope(Room)
+    authorize Room
   end
 
   # GET /rooms/1 or /rooms/1.json
   def show
+    authorize @room
   end
 
   # GET /rooms/new
   def new
     @room = Room.new
+    authorize @room
   end
 
   # GET /rooms/1/edit
   def edit
+    authorize @room
   end
 
   # POST /rooms or /rooms.json
   def create
     @room = Room.new(room_params)
+    authorize @room
 
     respond_to do |format|
       if @room.save
@@ -36,6 +41,8 @@ class RoomsController < ApplicationController
 
   # PATCH/PUT /rooms/1 or /rooms/1.json
   def update
+    authorize @room
+    
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to @room, notice: "Room was successfully updated." }
@@ -49,6 +56,8 @@ class RoomsController < ApplicationController
 
   # DELETE /rooms/1 or /rooms/1.json
   def destroy
+    authorize @room
+    
     @room.destroy!
 
     respond_to do |format|
@@ -60,11 +69,11 @@ class RoomsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_room
-      @room = Room.find(params.expect(:id))
+      @room = Room.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def room_params
-      params.expect(room: [ :name ])
+      params.require(:room).permit(:name)
     end
 end
