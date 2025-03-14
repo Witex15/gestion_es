@@ -1,19 +1,17 @@
 <% content_for :title, "People" %>
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="sm:flex sm:items-center">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center py-8">
     <div class="sm:flex-auto">
       <h1 class="text-2xl font-semibold text-gray-900">People</h1>
-      <p class="mt-2 text-sm text-gray-700">A list of all users in the system including their personal information and role.</p>
+      <p class="mt-2 text-sm text-gray-700">A list of all users in the system.</p>
     </div>
-    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-      <%= link_to new_person_path, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto" do %>
-        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-        </svg>
-        Add person
-      <% end %>
-    </div>
+    <% if policy(Person).create? %>
+      <%= render 'shared/new_resource_button', 
+                 resource_class: Person, 
+                 path: new_person_path, 
+                 button_text: "Add person" %>
+    <% end %>
   </div>
 
   <div class="mt-8 flex flex-col">
@@ -35,33 +33,23 @@
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               <% @people.each do |person| %>
-                <tr>
-                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                    <div class="flex items-center">
-                      <div class="h-10 w-10 flex-shrink-0">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                          <span class="font-medium leading-none text-white"><%= person.firstname[0] %><%= person.lastname[0] %></span>
-                        </span>
-                      </div>
-                      <div class="ml-4">
-                        <div class="font-medium text-gray-900"><%= person.full_name %></div>
-                        <div class="text-gray-500"><%= person.username %></div>
-                      </div>
-                    </div>
+                <tr id="<%= dom_id(person) %>">
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                    <%= link_to person.full_name, person_path(person), class: "text-indigo-600 hover:text-indigo-900" %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <%= person.email %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm">
-                    <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 
-                      <%= case person.role
-                          when 'dean'
-                            'bg-purple-100 text-purple-800'
-                          when 'teacher'
-                            'bg-blue-100 text-blue-800'
-                          else
-                            'bg-green-100 text-green-800'
-                          end %>">
+                    <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 <%= 
+                      case person.role
+                      when 'dean'
+                        'bg-purple-100 text-purple-800'
+                      when 'teacher'
+                        'bg-blue-100 text-blue-800'
+                      else
+                        'bg-green-100 text-green-800'
+                      end %>">
                       <%= person.role.titleize %>
                     </span>
                   </td>
@@ -69,30 +57,10 @@
                     <%= person.status.title %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= raw(person.address.to_s.gsub(Regexp.union([',']), '<br>')) %>
+                    <%= "#{person.address.street} #{person.address.number}, #{person.address.zip} #{person.address.town}" %>
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <div class="flex justify-end gap-2">
-                      <%= link_to person, class: "text-blue-600 hover:text-blue-900", title: "View" do %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                        </svg>
-                      <% end %>
-
-                      <%= link_to edit_person_path(person), class: "text-yellow-600 hover:text-yellow-900", title: "Edit" do %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                          <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                        </svg>
-                      <% end %>
-
-                      <%= button_to person_path(person), method: :delete, class: "text-red-600 hover:text-red-900", title: "Delete", data: { turbo_confirm: "Are you sure you want to delete this person?" } do %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                      <% end %>
-                    </div>
+                    <%= render 'shared/action_buttons', resource: person %>
                   </td>
                 </tr>
               <% end %>
