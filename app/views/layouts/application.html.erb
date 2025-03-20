@@ -124,6 +124,11 @@
                 <%= link_to "Reports", reports_path,
                     class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'reports' ? 'border-b-2 border-indigo-500' : ''}" %>
               <% end %>
+              
+              <% if current_person&.dean? %>
+                <%= link_to "Deleted Objects", deleted_objects_path,
+                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 #{controller_name == 'deleted_objects' ? 'border-b-2 border-indigo-500' : ''}" %>
+              <% end %>
             </div>
           </div>
         </div>

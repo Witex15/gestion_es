@@ -36,6 +36,17 @@ Rails.application.routes.draw do
   end
   resources :reports, only: [:index]
   
+  # Deleted objects management routes
+  resources :deleted_objects, only: [:index] do
+    member do
+      patch :restore, to: 'deleted_objects#restore'
+    end
+    collection do
+      patch :restore, to: 'deleted_objects#restore', as: :restore_deleted_object
+      patch :restore_all, to: 'deleted_objects#restore_all', as: :restore_all_deleted_objects
+    end
+  end
+  
   root "home#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
