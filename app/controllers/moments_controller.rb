@@ -59,7 +59,7 @@ class MomentsController < ApplicationController
     authorize @moment
     
     moment_type = @moment.moment_type.titleize
-    @moment.destroy!
+    @moment.destroy
 
     respond_to do |format|
       format.html { redirect_to moments_path, status: :see_other, notice: "#{moment_type} was successfully deleted." }
@@ -70,7 +70,7 @@ class MomentsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_moment
-      @moment = Moment.find(params[:id])
+    @moment = Moment.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

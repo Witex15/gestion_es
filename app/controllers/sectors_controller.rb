@@ -58,10 +58,10 @@ class SectorsController < ApplicationController
   def destroy
     authorize @sector
     
-    @sector.destroy!
+    @sector.destroy
 
     respond_to do |format|
-      format.html { redirect_to sectors_path, status: :see_other, notice: "Sector was successfully destroyed." }
+      format.html { redirect_to sectors_path, status: :see_other, notice: "Sector was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -69,7 +69,7 @@ class SectorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector
-      @sector = Sector.find(params[:id])
+    @sector = Sector.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

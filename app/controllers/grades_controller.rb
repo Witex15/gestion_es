@@ -17,20 +17,20 @@ class GradesController < ApplicationController
     @grade = Grade.new
     authorize @grade
     
-    @examinations = Examination.includes(course: [:subject, :school_class])
+    @examinations = Examination.active.includes(course: [:subject, :school_class])
                              .where(courses: { archived: false })
                              .order(effective_date: :desc)
-    @students = Person.where(role: :student)
+    @students = Person.active.where(role: :student)
   end
 
   # GET /grades/1/edit
   def edit
     authorize @grade
     
-    @examinations = Examination.includes(course: [:subject, :school_class])
+    @examinations = Examination.active.includes(course: [:subject, :school_class])
                              .where(courses: { archived: false })
                              .order(effective_date: :desc)
-    @students = Person.where(role: :student)
+    @students = Person.active.where(role: :student)
   end
 
   # POST /grades or /grades.json
@@ -41,10 +41,10 @@ class GradesController < ApplicationController
     if @grade.save
       redirect_to @grade, notice: "Grade was successfully created."
     else
-      @examinations = Examination.includes(course: [:subject, :school_class])
+      @examinations = Examination.active.includes(course: [:subject, :school_class])
                                .where(courses: { archived: false })
                                .order(effective_date: :desc)
-      @students = Person.where(role: :student)
+      @students = Person.active.where(role: :student)
       render :new, status: :unprocessable_entity
     end
   end
@@ -56,10 +56,10 @@ class GradesController < ApplicationController
     if @grade.update(grade_params)
       redirect_to @grade, notice: "Grade was successfully updated."
     else
-      @examinations = Examination.includes(course: [:subject, :school_class])
+      @examinations = Examination.active.includes(course: [:subject, :school_class])
                                .where(courses: { archived: false })
                                .order(effective_date: :desc)
-      @students = Person.where(role: :student)
+      @students = Person.active.where(role: :student)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -68,8 +68,8 @@ class GradesController < ApplicationController
   def destroy
     authorize @grade
     
-    @grade.destroy!
-    redirect_to grades_path, notice: "Grade was successfully destroyed.", status: :see_other
+    @grade.destroy
+    redirect_to grades_path, notice: "Grade was successfully deleted.", status: :see_other
   end
 
   private

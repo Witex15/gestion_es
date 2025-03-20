@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
   
   # GET /people or /people.json
   def index
-    @people = policy_scope(Person)
+    @people = policy_scope(Person.active)
     authorize Person
   end
 
@@ -71,7 +71,7 @@ class PeopleController < ApplicationController
   # DELETE /people/1 or /people/1.json
   def destroy
     authorize @person
-    @person.destroy!
+    @person.destroy
 
     respond_to do |format|
       format.html { redirect_to people_path, notice: "Person was successfully deleted." }
@@ -81,7 +81,7 @@ class PeopleController < ApplicationController
 
   private
     def set_person
-      @person = Person.find(params[:id])
+    @person = Person.active.find(params[:id])
     end
 
     def person_params

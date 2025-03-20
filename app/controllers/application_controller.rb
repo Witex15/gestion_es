@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   # Include Pundit for authorization
   include Pundit::Authorization
+  # Include SoftDeleteController for soft delete functionality
+  include SoftDeleteController
   
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern

@@ -71,10 +71,10 @@ class AddressesController < ApplicationController
   def destroy
     authorize @address
     
-    @address.destroy!
+    @address.destroy
 
     respond_to do |format|
-      format.html { redirect_to addresses_path, status: :see_other, notice: "Address was successfully destroyed." }
+      format.html { redirect_to addresses_path, status: :see_other, notice: "Address was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -89,7 +89,7 @@ class AddressesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_address
-      @address = Address.find(params[:id])
+    @address = Address.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

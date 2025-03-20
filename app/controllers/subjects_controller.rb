@@ -57,10 +57,10 @@ class SubjectsController < ApplicationController
   # DELETE /subjects/1 or /subjects/1.json
   def destroy
     authorize @subject
-    @subject.destroy!
+    @subject.destroy
 
     respond_to do |format|
-      format.html { redirect_to subjects_path, status: :see_other, notice: "Subject was successfully destroyed." }
+      format.html { redirect_to subjects_path, status: :see_other, notice: "Subject was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -68,7 +68,7 @@ class SubjectsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subject
-      @subject = Subject.find(params[:id])
+    @subject = Subject.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

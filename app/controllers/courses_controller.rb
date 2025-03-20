@@ -3,7 +3,7 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @courses = policy_scope(Course)
+    @courses = policy_scope(Course.active)
     authorize Course
   end
 
@@ -57,10 +57,10 @@ class CoursesController < ApplicationController
   # DELETE /courses/1 or /courses/1.json
   def destroy
     authorize @course
-    @course.destroy!
+    @course.destroy
 
     respond_to do |format|
-      format.html { redirect_to courses_path, status: :see_other, notice: "Course was successfully destroyed." }
+      format.html { redirect_to courses_path, status: :see_other, notice: "Course was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -68,7 +68,7 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find(params[:id])
+    @course = Course.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

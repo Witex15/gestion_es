@@ -59,10 +59,10 @@ class PromotionAssertsController < ApplicationController
   def destroy
     authorize @promotion_assert
     
-    @promotion_assert.destroy!
+    @promotion_assert.destroy
 
     respond_to do |format|
-      format.html { redirect_to promotion_asserts_url, notice: "Promotion assert was successfully destroyed." }
+      format.html { redirect_to promotion_asserts_url, notice: "Promotion assert was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -70,7 +70,7 @@ class PromotionAssertsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_promotion_assert
-      @promotion_assert = PromotionAssert.find(params[:id])
+    @promotion_assert = PromotionAssert.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

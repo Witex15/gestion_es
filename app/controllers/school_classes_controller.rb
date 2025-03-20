@@ -3,7 +3,7 @@ class SchoolClassesController < ApplicationController
 
   # GET /school_classes or /school_classes.json
   def index
-    @school_classes = policy_scope(SchoolClass)
+    @school_classes = policy_scope(SchoolClass.active)
     authorize SchoolClass
   end
 
@@ -26,7 +26,7 @@ class SchoolClassesController < ApplicationController
   # GET /school_classes/1/manage_students
   def manage_students
     authorize @school_class, :manage_students?
-    @available_students = Person.where(role: :student)
+    @available_students = Person.active.where(role: :student)
     @enrolled_students = @school_class.students
   end
 
@@ -83,10 +83,10 @@ class SchoolClassesController < ApplicationController
   # DELETE /school_classes/1 or /school_classes/1.json
   def destroy
     authorize @school_class
-    @school_class.destroy!
+    @school_class.destroy
 
     respond_to do |format|
-      format.html { redirect_to school_classes_path, status: :see_other, notice: "School class was successfully destroyed." }
+      format.html { redirect_to school_classes_path, status: :see_other, notice: "School class was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -94,7 +94,7 @@ class SchoolClassesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_school_class
-      @school_class = SchoolClass.find(params[:id])
+    @school_class = SchoolClass.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

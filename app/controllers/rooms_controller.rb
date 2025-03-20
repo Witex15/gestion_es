@@ -58,10 +58,10 @@ class RoomsController < ApplicationController
   def destroy
     authorize @room
     
-    @room.destroy!
+    @room.destroy
 
     respond_to do |format|
-      format.html { redirect_to rooms_path, status: :see_other, notice: "Room was successfully destroyed." }
+      format.html { redirect_to rooms_path, status: :see_other, notice: "Room was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -69,7 +69,7 @@ class RoomsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_room
-      @room = Room.find(params[:id])
+    @room = Room.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

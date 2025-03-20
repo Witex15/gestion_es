@@ -78,10 +78,10 @@ class StatusesController < ApplicationController
   def destroy
     authorize @status
     
-    @status.destroy!
+    @status.destroy
 
     respond_to do |format|
-      format.html { redirect_to statuses_path, status: :see_other, notice: "Status was successfully destroyed." }
+      format.html { redirect_to statuses_path, status: :see_other, notice: "Status was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -89,7 +89,7 @@ class StatusesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_status
-      @status = Status.find(params[:id])
+    @status = Status.active.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

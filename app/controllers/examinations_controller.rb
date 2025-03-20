@@ -58,10 +58,10 @@ class ExaminationsController < ApplicationController
   def destroy
     authorize @examination
     
-    @examination.destroy!
+    @examination.destroy
 
     respond_to do |format|
-      format.html { redirect_to examinations_path, status: :see_other, notice: "Examination was successfully destroyed." }
+      format.html { redirect_to examinations_path, status: :see_other, notice: "Examination was successfully deleted." }
       format.json { head :no_content }
     end
   end
