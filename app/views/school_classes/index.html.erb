@@ -38,16 +38,24 @@
                     <%= link_to school_class.name, school_class_path(school_class), class: "text-indigo-600 hover:text-indigo-900" %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= "#{school_class.moment.moment_type.titleize} (#{school_class.moment.start_on.strftime('%B %Y')} - #{school_class.moment.end_on.strftime('%B %Y')})" %>
+                    <% if school_class.moment %>
+                      <% begin %>
+                        <%= "#{school_class.moment.moment_type.titleize} (#{school_class.moment.start_on.strftime('%B %Y')} - #{school_class.moment.end_on.strftime('%B %Y')})" %>
+                      <% rescue %>
+                        <%= school_class.moment.uid rescue '<span class="text-red-500">Academic Period unavailable</span>'.html_safe %>
+                      <% end %>
+                    <% else %>
+                      <span class="text-red-500">Academic Period unavailable</span>
+                    <% end %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= school_class.room.name %>
+                    <%= school_class.room&.name || '<span class="text-red-500">Room unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= school_class.master.full_name %>
+                    <%= school_class.master&.full_name || '<span class="text-red-500">Master unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= school_class.sector.name %>
+                    <%= school_class.sector&.name || '<span class="text-red-500">Sector unavailable</span>'.html_safe %>
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                     <div class="flex justify-end gap-2">

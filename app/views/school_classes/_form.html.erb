@@ -19,9 +19,14 @@
   <div class="my-5">
     <%= form.label :moment_id, "Academic Period" %>
     <%= form.collection_select :moment_id, 
-        Moment.all, 
+        Moment.active, 
         :id, 
-        ->(moment) { "#{moment.moment_type.titleize} (#{moment.start_on.strftime('%B %Y')} - #{moment.end_on.strftime('%B %Y')})" },
+        ->(moment) { 
+          type = moment.moment_type.titleize rescue "Unknown type"
+          start_date = moment.start_on&.strftime('%B %Y') || "Unknown start"
+          end_date = moment.end_on&.strftime('%B %Y') || "Unknown end"
+          "#{type} (#{start_date} - #{end_date})" 
+        },
         { prompt: "Select an academic period" },
         class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:moment_id].none?, "border-red-400 focus:outline-red-600": school_class.errors[:moment_id].any?}] %>
   </div>
@@ -29,7 +34,7 @@
   <div class="my-5">
     <%= form.label :room_id, "Room" %>
     <%= form.collection_select :room_id, 
-        Room.all, 
+        Room.active, 
         :id, 
         :name,
         { prompt: "Select a room" },
@@ -39,7 +44,7 @@
   <div class="my-5">
     <%= form.label :master_id, "Master Teacher" %>
     <%= form.collection_select :master_id, 
-        Person.where(role: :teacher), 
+        Person.active.where(role: :teacher), 
         :id, 
         :full_name,
         { prompt: "Select a master teacher" },
@@ -49,7 +54,7 @@
   <div class="my-5">
     <%= form.label :sector_id, "Sector" %>
     <%= form.collection_select :sector_id, 
-        Sector.all, 
+        Sector.active, 
         :id, 
         :name,
         { prompt: "Select a sector" },

@@ -44,7 +44,7 @@
           Academic Period
         </label>
         <div class="mt-1 sm:col-span-2 sm:mt-0">
-          <%= form.collection_select :moment_id, Moment.all, :id, :uid,
+          <%= form.collection_select :moment_id, Moment.active, :id, :uid,
             { prompt: "Select academic period" },
             { class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" } %>
         </div>
@@ -55,7 +55,7 @@
           Sector
         </label>
         <div class="mt-1 sm:col-span-2 sm:mt-0">
-          <%= form.collection_select :sector_id, Sector.all, :id, :name,
+          <%= form.collection_select :sector_id, Sector.active, :id, :name,
             { prompt: "Select sector" },
             { class: "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:max-w-xs sm:text-sm" } %>
         </div>

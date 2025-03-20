@@ -27,7 +27,7 @@
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 sm:px-6">
         <h3 class="text-lg font-medium leading-6 text-gray-900">
-          Grade for <%= @grade.student.full_name %>
+          Grade for <%= @grade.student&.full_name || '<span class="text-red-500">Student unavailable</span>'.html_safe %>
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">Grade details and information.</p>
       </div>
@@ -36,13 +36,24 @@
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Student</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= @grade.student.full_name %>
+              <%= @grade.student&.full_name || '<span class="text-red-500">Student unavailable</span>'.html_safe %>
             </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Examination</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= "#{@grade.examination.title} (#{@grade.examination.course.subject.name} - #{@grade.examination.course.school_class.name})" %>
+              <% if @grade.examination %>
+                <%= @grade.examination.title %>
+                <% if @grade.examination.course&.subject && @grade.examination.course&.school_class %>
+                  <%= " (#{@grade.examination.course.subject.name} - #{@grade.examination.course.school_class.name})" %>
+                <% elsif @grade.examination.course&.subject %>
+                  <%= " (#{@grade.examination.course.subject.name})" %>
+                <% elsif @grade.examination.course&.school_class %>
+                  <%= " (#{@grade.examination.course.school_class.name})" %>
+                <% end %>
+              <% else %>
+                <span class="text-red-500">Examination unavailable</span>
+              <% end %>
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -52,9 +63,9 @@
             </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Date</dt>
+            <dt class="text-sm font-medium text-gray-500">Date of Execution</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= @grade.execute_on.strftime("%B %d, %Y") %>
+              <%= @grade.execute_on.strftime("%B %d, %Y") if @grade.execute_on.present? %>
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

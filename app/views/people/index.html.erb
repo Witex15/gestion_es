@@ -54,10 +54,14 @@
                     </span>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= person.status.title %>
+                    <%= person.status&.title || '<span class="text-red-500">Status unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= "#{person.address.street} #{person.address.number}, #{person.address.zip} #{person.address.town}" %>
+                    <% if person.address %>
+                      <%= "#{person.address.street} #{person.address.number}, #{person.address.zip} #{person.address.town}" %>
+                    <% else %>
+                      <span class="text-red-500">Address unavailable</span>
+                    <% end %>
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                     <%= render 'shared/action_buttons', resource: person %>

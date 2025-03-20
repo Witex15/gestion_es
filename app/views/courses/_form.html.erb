@@ -28,7 +28,7 @@
 
   <div class="my-5">
     <%= form.label :subject_id, "Subject" %>
-    <%= form.collection_select :subject_id, Subject.all, :id, :name, 
+    <%= form.collection_select :subject_id, Subject.active, :id, :name, 
         { prompt: "Select a subject" },
         class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
                 {"border-gray-400 focus:outline-blue-600": course.errors[:subject_id].none?, 
@@ -37,7 +37,7 @@
 
   <div class="my-5">
     <%= form.label :school_class_id, "School Class" %>
-    <%= form.collection_select :school_class_id, SchoolClass.all, :id, :name, 
+    <%= form.collection_select :school_class_id, SchoolClass.active, :id, :name, 
         { prompt: "Select a school class" },
         class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
                 {"border-gray-400 focus:outline-blue-600": course.errors[:school_class_id].none?, 
@@ -46,7 +46,7 @@
 
   <div class="my-5">
     <%= form.label :moment_id, "Academic Period" %>
-    <%= form.collection_select :moment_id, Moment.all, :id, :display_name, 
+    <%= form.collection_select :moment_id, Moment.active, :id, :display_name, 
         { prompt: "Select an academic period" },
         class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
                 {"border-gray-400 focus:outline-blue-600": course.errors[:moment_id].none?, 
@@ -55,7 +55,7 @@
 
   <div class="my-5">
     <%= form.label :teacher_id, "Teacher" %>
-    <%= form.collection_select :teacher_id, Person.all, :id, :full_name, 
+    <%= form.collection_select :teacher_id, Person.active.where(role: :teacher), :id, :full_name, 
         { prompt: "Select a teacher" },
         class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", 
                 {"border-gray-400 focus:outline-blue-600": course.errors[:teacher_id].none?, 

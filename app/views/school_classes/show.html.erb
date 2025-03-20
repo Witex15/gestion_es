@@ -38,20 +38,26 @@
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Academic Period</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= "#{@school_class.moment.moment_type.titleize} (#{@school_class.moment.start_on.strftime('%B %Y')} - #{@school_class.moment.end_on.strftime('%B %Y')})" %>
+              <%= @school_class.moment&.display_name || '<span class="text-red-500">Academic Period unavailable</span>'.html_safe %>
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Room</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @school_class.room.name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <%= @school_class.room&.name || '<span class="text-red-500">Room unavailable</span>'.html_safe %>
+            </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Master Teacher</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @school_class.master.full_name %></dd>
+            <dt class="text-sm font-medium text-gray-500">Master</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <%= @school_class.master&.full_name || '<span class="text-red-500">Master teacher unavailable</span>'.html_safe %>
+            </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Sector</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @school_class.sector.name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <%= @school_class.sector&.name || '<span class="text-red-500">Sector unavailable</span>'.html_safe %>
+            </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Created at</dt>

@@ -36,16 +36,16 @@
               <% @courses.each do |course| %>
                 <tr id="<%= dom_id(course) %>">
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                    <%= course.subject.name %>
+                    <%= course.subject&.name || '<span class="text-red-500">Subject unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= course.school_class.name %>
+                    <%= course.school_class&.name || '<span class="text-red-500">Class unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= course.teacher.full_name %>
+                    <%= course.teacher&.full_name || '<span class="text-red-500">Teacher unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= Date::DAYNAMES[course.week_day] %>
+                    <%= Date::DAYNAMES[course.week_day] if course.week_day.present? %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <%= "#{course.start_at.strftime("%H:%M")} - #{course.end_at.strftime("%H:%M")}" %>

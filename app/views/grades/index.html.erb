@@ -36,10 +36,21 @@
               <% @grades.each do |grade| %>
                 <tr id="<%= dom_id(grade) %>">
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                    <%= grade.student.full_name %>
+                    <%= grade.student&.full_name || '<span class="text-red-500">Student unavailable</span>'.html_safe %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= "#{grade.examination.title} (#{grade.examination.course.subject.name} - #{grade.examination.course.school_class.name})" %>
+                    <% if grade.examination %>
+                      <%= grade.examination.title %>
+                      <% if grade.examination.course&.subject && grade.examination.course&.school_class %>
+                        <%= " (#{grade.examination.course.subject.name} - #{grade.examination.course.school_class.name})" %>
+                      <% elsif grade.examination.course&.subject %>
+                        <%= " (#{grade.examination.course.subject.name})" %>
+                      <% elsif grade.examination.course&.school_class %>
+                        <%= " (#{grade.examination.course.school_class.name})" %>
+                      <% end %>
+                    <% else %>
+                      <span class="text-red-500">Examination unavailable</span>
+                    <% end %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <%= grade.value %>

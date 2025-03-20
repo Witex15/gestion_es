@@ -25,19 +25,23 @@
           <dd class="mt-1 text-sm text-gray-900"><%= @promotion_assert.description %></dd>
         </div>
 
-        <div class="sm:col-span-1">
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Function</dt>
-          <dd class="mt-1 text-sm text-gray-900"><%= @promotion_assert.function_description %></dd>
+          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @promotion_assert.function %></dd>
         </div>
 
-        <div class="sm:col-span-1">
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Academic Period</dt>
-          <dd class="mt-1 text-sm text-gray-900"><%= @promotion_assert.moment.uid %></dd>
+          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <%= @promotion_assert.moment&.display_name || '<span class="text-red-500">Academic Period unavailable</span>'.html_safe %>
+          </dd>
         </div>
 
-        <div class="sm:col-span-1">
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Sector</dt>
-          <dd class="mt-1 text-sm text-gray-900"><%= @promotion_assert.sector.name %></dd>
+          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <%= @promotion_assert.sector&.name || '<span class="text-red-500">Sector unavailable</span>'.html_safe %>
+          </dd>
         </div>
 
         <div class="sm:col-span-2">

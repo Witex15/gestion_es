@@ -26,31 +26,31 @@
   <div class="mt-8">
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
       <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900"><%= @course.subject.name %></h3>
+        <h3 class="text-lg font-medium leading-6 text-gray-900"><%= @course.subject&.name || '<span class="text-red-500">Subject unavailable</span>'.html_safe %></h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">Course information and details.</p>
       </div>
       <div class="border-t border-gray-200">
         <dl>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Subject</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.subject.name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.subject&.name || '<span class="text-red-500">Subject unavailable</span>'.html_safe %></dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Class</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.school_class.name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.school_class&.name || '<span class="text-red-500">Class unavailable</span>'.html_safe %></dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Teacher</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.teacher.full_name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.teacher&.full_name || '<span class="text-red-500">Teacher unavailable</span>'.html_safe %></dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Academic Period</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.moment.display_name %></dd>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.moment&.display_name || '<span class="text-red-500">Academic Period unavailable</span>'.html_safe %></dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Schedule</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= Date::DAYNAMES[@course.week_day] %>, <%= "#{@course.start_at.strftime("%H:%M")} - #{@course.end_at.strftime("%H:%M")}" %>
+              <%= Date::DAYNAMES[@course.week_day] if @course.week_day.present? %><%= ", #{@course.start_at&.strftime("%H:%M")} - #{@course.end_at&.strftime("%H:%M")}" if @course.start_at.present? && @course.end_at.present? %>
             </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

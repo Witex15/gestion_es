@@ -38,7 +38,15 @@
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Course</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <%= "#{@examination.course.subject.name} - #{@examination.course.school_class.name}" %>
+              <% if @examination.course&.subject && @examination.course&.school_class %>
+                <%= "#{@examination.course.subject.name} - #{@examination.course.school_class.name}" %>
+              <% elsif @examination.course&.subject %>
+                <%= @examination.course.subject.name %>
+              <% elsif @examination.course&.school_class %>
+                <%= @examination.course.school_class.name %>
+              <% else %>
+                <span class="text-red-500">Course information unavailable</span>
+              <% end %>
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

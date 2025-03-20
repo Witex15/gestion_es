@@ -36,7 +36,15 @@
                 <tr id="<%= dom_id(examination) %>">
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= examination.title %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    <%= "#{examination.course.subject.name} - #{examination.course.school_class.name}" %>
+                    <% if examination.course&.subject && examination.course&.school_class %>
+                      <%= "#{examination.course.subject.name} - #{examination.course.school_class.name}" %>
+                    <% elsif examination.course&.subject %>
+                      <%= examination.course.subject.name %>
+                    <% elsif examination.course&.school_class %>
+                      <%= examination.course.school_class.name %>
+                    <% else %>
+                      <span class="text-red-500">Course/Subject data unavailable</span>
+                    <% end %>
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     <%= examination.effective_date.strftime("%B %d, %Y") %>
