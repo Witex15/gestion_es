@@ -1,24 +1,34 @@
-# README
+# School Management System
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Ruby on Rails application for managing school classes, students, teachers, courses, and grades with soft delete functionality.
 
-Things you may want to cover:
+## Database Setup
 
-* Ruby version
+To set up the database from scratch:
 
-* System dependencies
+```bash
+# Drop the existing database
+rails db:drop
 
-* Configuration
+# Create a new database
+rails db:create
 
-* Database creation
+# Run migrations to set up database schema
+rails db:migrate
 
-* Database initialization
+# Seed the database with initial data
+rails db:seed
 
-* How to run the test suite
+# Or do all of the above in one command
+rails db:reset
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Test Users
 
-* Deployment instructions
+The database seeds include the following test users:
 
-* ...
+| Role    | Username | Email               | Password    |
+|---------|----------|---------------------|-------------|
+| Dean    | dean     | dean@school.com     | password123 |
+| Teacher | teacher  | teacher@school.com  | password123 |
+| Student | student  | student@school.com  | password123 |

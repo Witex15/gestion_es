@@ -12,7 +12,12 @@ require 'faker'
 
 # Clear existing data
 puts "Cleaning database..."
-[Grade, Examination, Course, StudentsClass, SchoolClass, PromotionAssert, Person, Status, Address, Room, Subject, Sector, Moment].each(&:destroy_all)
+# Use really_destroy_all instead of destroy_all for seeding
+# This completely removes records from the database instead of soft-deleting them
+[Grade, Examination, Course, StudentsClass, SchoolClass, PromotionAssert, Person, Status, Address, Room, Subject, Sector, Moment].each do |model|
+  model.unscoped.update_all(deleted_at: nil) # Clear any soft-deleted flags first
+  model.unscoped.each(&:really_destroy!) # Permanently delete all records
+end
 
 puts "Creating seed data..."
 
@@ -22,30 +27,62 @@ student_status = Status.create!(title: "Student", name: "Student", slug: "studen
 teacher_status = Status.create!(title: "Teacher", name: "Teacher", slug: "teacher")
 admin_status = Status.create!(title: "Administrator", name: "Administrator", slug: "admin")
 
-# Create Dean (Administrator)
-puts "Creating dean..."
+# Create test users for each role (for easy testing)
+puts "Creating test users..."
+test_address = Address.create!(
+  zip: 1400,
+  town: "Yverdon-les-Bains",
+  street: "Route de Cheseaux",
+  number: "1"
+)
+
+# Test Dean (Administrator)
 dean = Person.create!(
-  username: "dean.admin",
-  lastname: "Smith",
+  username: "dean",
+  lastname: "Admin",
   firstname: "John",
   email: "dean@school.com",
   phone_number: "0791234567",
   iban: "CH93 0076 2011 6238 4295 7",
   role: 2,  # Admin role
   status: admin_status,
-  address: Address.create!(
-    zip: 1400,
-    town: "Yverdon-les-Bains",
-    street: "Route de Cheseaux",
-    number: "1"
-  ),
-  password: "admin123"  # Default password for testing
+  address: test_address,
+  password: "password123"  # Test password
+)
+
+# Test Teacher
+teacher = Person.create!(
+  username: "teacher",
+  lastname: "Smith",
+  firstname: "Jane",
+  email: "teacher@school.com",
+  phone_number: "0791234568",
+  iban: "CH93 0076 2011 6238 4295 8",
+  role: 1,  # Teacher role
+  status: teacher_status,
+  address: test_address,
+  password: "password123"  # Test password
+)
+
+# Test Student
+student = Person.create!(
+  username: "student",
+  lastname: "Brown",
+  firstname: "Mike",
+  email: "student@school.com",
+  phone_number: "0791234569",
+  iban: "CH93 0076 2011 6238 4295 9",
+  role: 0,  # Student role
+  status: student_status,
+  address: test_address,
+  password: "password123"  # Test password
 )
 
 # Create Addresses
 puts "Creating addresses..."
 addresses = []
-10.times do
+addresses << test_address # Add the test address to the pool
+9.times do
   addresses << Address.create!(
     zip: Faker::Number.number(digits: 4),
     town: Faker::Address.city,
@@ -91,10 +128,10 @@ moments = []
   moments << Moment.create!(moment)
 end
 
-# Create Teachers
-puts "Creating teachers..."
-teachers = []
-5.times do
+# Create Teachers (additional)
+puts "Creating additional teachers..."
+teachers = [teacher] # Add the test teacher
+4.times do
   teachers << Person.create!(
     username: Faker::Internet.unique.username,
     lastname: Faker::Name.last_name,
@@ -109,10 +146,10 @@ teachers = []
   )
 end
 
-# Create Students
-puts "Creating students..."
-students = []
-20.times do |i|
+# Create Students (additional)
+puts "Creating additional students..."
+students = [student] # Add the test student
+19.times do |i|
   students << Person.create!(
     username: Faker::Internet.unique.username,
     lastname: Faker::Name.last_name,
