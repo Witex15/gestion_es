@@ -1,6 +1,6 @@
 class Grade < ApplicationRecord
-  belongs_to :examination
-  belongs_to :student, class_name: 'Person'
+  belongs_to :examination, -> { where(deleted_at: nil) }
+  belongs_to :student, -> { where(deleted_at: nil) }, class_name: 'Person'
   
   validates :value, presence: true, 
                    numericality: { 

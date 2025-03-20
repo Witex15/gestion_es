@@ -12,12 +12,12 @@ class Person < ApplicationRecord
   end
   
   enum :role, { student: 0, teacher: 1, dean: 2 }
-  belongs_to :status
-  belongs_to :address
+  belongs_to :status, -> { where(deleted_at: nil) }
+  belongs_to :address, -> { where(deleted_at: nil) }
   
   # Student associations
-  has_many :students_classes, foreign_key: :student_id
-  has_many :school_classes, through: :students_classes
+  has_many :students_classes, -> { where(deleted_at: nil) }, foreign_key: :student_id
+  has_many :school_classes, -> { where(deleted_at: nil) }, through: :students_classes
   
   accepts_nested_attributes_for :address
   

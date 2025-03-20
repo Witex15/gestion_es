@@ -1,6 +1,6 @@
 class PromotionAssert < ApplicationRecord
-  belongs_to :moment
-  belongs_to :sector
+  belongs_to :moment, -> { where(deleted_at: nil) }
+  belongs_to :sector, -> { where(deleted_at: nil) }
 
   validates :description, presence: true
   validates :function, presence: true, inclusion: { 
