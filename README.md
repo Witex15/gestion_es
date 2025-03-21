@@ -1,6 +1,6 @@
 # School Management System
 
-[![Ruby](https://img.shields.io/badge/Ruby-3.2.2-red)](https://www.ruby-lang.org/)
+[![Ruby](https://img.shields.io/badge/Ruby-3.3.0-red)](https://www.ruby-lang.org/)
 [![Rails](https://img.shields.io/badge/Rails-8.0.0-red)](https://rubyonrails.org/)
 
 A Ruby on Rails application for managing educational institutions with comprehensive tracking of school classes, students, teachers, courses, examinations, and grades. Features role-based access control and soft delete functionality throughout.
@@ -18,7 +18,7 @@ A Ruby on Rails application for managing educational institutions with comprehen
 
 ## Prerequisites
 
-- Ruby 3.2.2+
+- Ruby 3.3.0
 - Rails 8.0.0+
 - SQLite3 (development)
 - PostgreSQL (production)
@@ -31,6 +31,7 @@ A Ruby on Rails application for managing educational institutions with comprehen
    bundle install
    yarn install
    ```
+
 ## Database Setup
 
 To set up the database from scratch:
@@ -45,6 +46,16 @@ rails db:create
 rails db:migrate
 rails db:seed
 ```
+
+The seed data will create a complete educational system with:
+- 3 educational sectors
+- Multiple school classes
+- 5 test rooms
+- 5 subjects
+- 20 students (including test student)
+- 5 teachers (including test teacher)
+- Course schedules
+- Example examinations and grades
 
 ## Test Users
 
@@ -88,7 +99,3 @@ This application uses soft delete throughout to preserve data integrity while al
 3. Commit changes using conventional commits: `git commit -m "feat: add amazing feature"`
 4. Push to your branch: `git push origin feature/amazing-feature`
 5. Open a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
