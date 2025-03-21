@@ -34,7 +34,11 @@ Rails.application.routes.draw do
       get :search
     end
   end
-  resources :reports, only: [:index]
+  resources :reports, only: [:index] do
+    collection do
+      get :export_pdf
+    end
+  end
   
   # Deleted objects management routes
   resources :deleted_objects, only: [:index] do
