@@ -18,4 +18,14 @@ class ReportPolicy < ApplicationPolicy
   def index?
     true # Everyone can access reports, but they'll be filtered by scope
   end
+
+  def export_pdf?
+    # Students can export their own reports
+    return true if user.student?
+    
+    # Deans can export any student's report
+    return true if user.dean?
+    
+    false
+  end
 end 
