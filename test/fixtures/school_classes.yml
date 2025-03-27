@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  moment: one
+  room: one
+  master: one
+  sector: one
+
+two:
+  name: MyString
+  moment: two
+  room: two
+  master: two
+  sector: two

@@ -1,0 +1,67 @@
+<%= form_with(model: school_class, class: "contents") do |form| %>
+  <% if school_class.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(school_class.errors.count, "error") %> prohibited this school_class from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% school_class.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:name].none?, "border-red-400 focus:outline-red-600": school_class.errors[:name].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :moment_id, "Academic Period" %>
+    <%= form.collection_select :moment_id, 
+        Moment.active, 
+        :id, 
+        ->(moment) { 
+          type = moment.moment_type.titleize rescue "Unknown type"
+          start_date = moment.start_on&.strftime('%B %Y') || "Unknown start"
+          end_date = moment.end_on&.strftime('%B %Y') || "Unknown end"
+          "#{type} (#{start_date} - #{end_date})" 
+        },
+        { prompt: "Select an academic period" },
+        class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:moment_id].none?, "border-red-400 focus:outline-red-600": school_class.errors[:moment_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :room_id, "Room" %>
+    <%= form.collection_select :room_id, 
+        Room.active, 
+        :id, 
+        :name,
+        { prompt: "Select a room" },
+        class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:room_id].none?, "border-red-400 focus:outline-red-600": school_class.errors[:room_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :master_id, "Master Teacher" %>
+    <%= form.collection_select :master_id, 
+        Person.active.where(role: :teacher), 
+        :id, 
+        :full_name,
+        { prompt: "Select a master teacher" },
+        class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:master_id].none?, "border-red-400 focus:outline-red-600": school_class.errors[:master_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :sector_id, "Sector" %>
+    <%= form.collection_select :sector_id, 
+        Sector.active, 
+        :id, 
+        :name,
+        { prompt: "Select a sector" },
+        class: ["block shadow-sm rounded-md border outline-hidden px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": school_class.errors[:sector_id].none?, "border-red-400 focus:outline-red-600": school_class.errors[:sector_id].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

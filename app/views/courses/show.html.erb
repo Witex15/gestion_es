@@ -1,0 +1,92 @@
+<% content_for :title, "Course Details" %>
+
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center py-8">
+    <div class="sm:flex-auto">
+      <div class="flex items-center">
+        <div class="h-12 w-12 flex items-center justify-center rounded-lg bg-blue-600">
+          <svg class="h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+          </svg>
+        </div>
+        <h1 class="ml-4 text-2xl font-semibold text-gray-900">Course Details</h1>
+      </div>
+      <p class="mt-2 text-sm text-gray-700">View and manage course information.</p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <%= link_to courses_path, class: "inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto" do %>
+        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+        </svg>
+        Back to courses
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900"><%= @course.subject&.name || '<span class="text-red-500">Subject unavailable</span>'.html_safe %></h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">Course information and details.</p>
+      </div>
+      <div class="border-t border-gray-200">
+        <dl>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Subject</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.subject&.name || '<span class="text-red-500">Subject unavailable</span>'.html_safe %></dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Class</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.school_class&.name || '<span class="text-red-500">Class unavailable</span>'.html_safe %></dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Teacher</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.teacher&.full_name || '<span class="text-red-500">Teacher unavailable</span>'.html_safe %></dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Academic Period</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.moment&.display_name || '<span class="text-red-500">Academic Period unavailable</span>'.html_safe %></dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Schedule</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <%= Date::DAYNAMES[@course.week_day] if @course.week_day.present? %><%= ", #{@course.start_at&.strftime("%H:%M")} - #{@course.end_at&.strftime("%H:%M")}" if @course.start_at.present? && @course.end_at.present? %>
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Status</dt>
+            <dd class="mt-1 text-sm sm:col-span-2 sm:mt-0">
+              <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 <%= @course.archived? ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800" %>">
+                <%= @course.archived? ? "Archived" : "Active" %>
+              </span>
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Created at</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.created_at.strftime("%B %d, %Y") %></dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Last updated</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @course.updated_at.strftime("%B %d, %Y") %></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-6 flex space-x-3">
+      <%= link_to edit_course_path(@course), class: "inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" do %>
+        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+          <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+        </svg>
+        Edit
+      <% end %>
+      <%= button_to @course, method: :delete, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2", form: { data: { turbo_confirm: "Are you sure?" } } do %>
+        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
+        </svg>
+        Delete
+      <% end %>
+    </div>
+  </div>
+</div>
