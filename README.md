@@ -29,7 +29,6 @@ A Ruby on Rails application for managing educational institutions with comprehen
 1. Install dependencies:
    ```bash
    bundle install
-   yarn install
    ```
 
 ## Database Setup
