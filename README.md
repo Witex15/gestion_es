@@ -13,6 +13,7 @@ A Ruby on Rails application for managing educational institutions with comprehen
 - [Test Users](#test-users)
 - [Usage](#usage)
 - [Soft Delete Implementation](#soft-delete-implementation)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -90,6 +91,10 @@ This application uses soft delete throughout to preserve data integrity while al
 - Database queries automatically filter out soft-deleted records using a default scope
 - Foreign key relationships remain intact, preventing constraint errors
 - To permanently delete records when necessary, use `record.really_destroy!`
+
+## Documentation
+
+For detailed documentation about the application's architecture, database schema, and API endpoints, please visit the [Documentation](docs/README.md) directory.
 
 ## Contributing
 
